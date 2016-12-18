@@ -27,7 +27,7 @@ ui <- tagList(
         tabPanel("Create/edit",
             fluidRow(
                 column(width = 7,
-                  textInput("pathToMapImage", label = "Enter path to map image or saved annotations (.rda file):", value = "~/Documents/dnd/campaigns/curse_of_strahd/images/maps/lowres/bluewaterinn_player_gridded.jpg", width = "100%")
+                  textInput("pathToMapImage", label = "Enter path to map image or saved annotations (.rda file):", value = "/path/to/file/map_image_to_annotate.jpg", width = "100%")
                 ),
                 column(width = 1,
                     HTML("<label for=\"loadImage\">&nbsp</label>"),
@@ -43,9 +43,9 @@ ui <- tagList(
                     actionButton("stopRegion", label = "Store region"),
                     actionButton("updateRegion", label = "Update region"),
                     textOutput("storeRegionSuccessMessage"),
-                    strong("Enter markdown-formatted annotation:"),
+                    strong("Enter Markdown-formatted annotation:"),
                     tags$textarea(id = "regionDescrip", rows = 10, cols = 50, "The tattered walls of this room are lined with rusted armor..."),
-                    textInput("pathToSaveFile", label = "Enter filename to save annotations:", value = "~/Documents/dnd/campaigns/curse_of_strahd/mapannots/bluewaterinn.rda", width = "100%"),
+                    textInput("pathToSaveFile", label = "Enter filename to save annotations:", value = "/path/to/file/saved_annotations.rda", width = "100%"),
                     actionButton("saveOutput", label = "Save output"),
                     textOutput("saveOutputSuccessMessage"),
                     verbatimTextOutput("regionInfo")
@@ -55,7 +55,7 @@ ui <- tagList(
         tabPanel("Load",
             fluidRow(
                 column(width = 7,
-                  textInput("pathToAnnotsFile", label = "Enter path to saved annotations file:", value = "~/Documents/dnd/campaigns/curse_of_strahd/mapannots/bluewaterinn.rda", width = "100%")
+                  textInput("pathToAnnotsFile", label = "Enter path to saved annotations file:", value = "/path/to/file/saved_annotations.rda", width = "100%")
                 ),
                 column(width = 1,
                     HTML("<label for=\"loadAnnots\">&nbsp</label>"),
