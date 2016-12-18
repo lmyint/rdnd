@@ -1,0 +1,3 @@
+# R tools for Dungeons and Dragons campaign building
+
+This repository contains tools for stat rolling and map annotation. The map annotator is a Shiny application that allows you to load map images from your computer and annotate regions with descriptions in Markdown format. The app also loads annotations and displays them as a clickable map in the browser with the Markdown descriptions rendered in HTML.
