@@ -85,15 +85,13 @@ server <- function(input, output, session) {
         regionIndexSelected = NA
     )
     
-
-    # imagePath <- eventReactive(input$loadImage, {
-    #     input$pathToMapImage
-    # })
+    ## Load image or existing annotations
     observeEvent(input$loadImage, {
         filePath <- input$pathToMapImage
         fileExt <- tail(strsplit(filePath, "\\.")[[1]], 1)
         isRDA <- length(grep("[Rr][Dd][Aa][Tt]{0,1}[Aa]{0,1}", fileExt))==1
         if (isRDA) {
+            ## If supplied an annotations file, load saved data
             annotsEdit <- new.env()
             load(filePath, envir = annotsEdit)
             mapPath <- get("mapPath", envir = annotsEdit)
@@ -113,6 +111,7 @@ server <- function(input, output, session) {
         rv$map <- map
     })
 
+    ## When brush region changes, add the rectangle to the list of rects for this region
     observeEvent(input$mapBrush, {
         coords <- c(input$mapBrush$xmin, input$mapBrush$xmax, input$mapBrush$ymin, input$mapBrush$ymax)
         rv$subRegionList[[length(rv$subRegionList)+1]] <- coords
@@ -131,11 +130,12 @@ server <- function(input, output, session) {
         output$storeRegionSuccessMessage <- renderText({"Region stored!"})
     })
 
+    ## Double-click existing region: edit
     observeEvent(input$map_dblclick, {
         info <- getDescripClicked(input$map_dblclick, rv$regionList, rv$regionDescripList, returnIndex = TRUE)
         descripString <- info$descrip
         rv$regionIndexSelected <- info$index
-        # input$regionDescrip <- paste0(input$regionDescrip, descripString)
+        ## Call JavaScript code to fill textbox
         js$addText(elementID = "regionDescrip", text = descripString)
     })
 
@@ -144,14 +144,8 @@ server <- function(input, output, session) {
         output$storeRegionSuccessMessage <- renderText({"Region updated!"})
     })
 
+    ## Display the map and annotated regions
     plotHeight <- reactive({
-        # map <- readImage(imagePath())
-        # mapDims <- dim(rv$map)
-        # if (mapDims[1] > 800) {
-        #     ratio <- mapDims[1]/800
-        #     newDims <- mapDims/ratio
-        # }
-        # return(newDims[2])
         dim(rv$map)[2]
     })
 
@@ -167,11 +161,6 @@ server <- function(input, output, session) {
     })
 
     output$mapPlot <- renderPlot({
-        # map <- readImage(imagePath())
-        # mapDims <- dim(map)
-        # if (mapDims[1] > 800) {
-        #     map <- resize(map, w = 800)
-        # }
         display(rv$map, method = "raster")
         drawRects()
     })
@@ -188,6 +177,7 @@ server <- function(input, output, session) {
         )
     })
 
+    ## Show information about number of rectangles forming this region
     output$regionInfo <- renderPrint({
         cat("Region index selected: ", rv$regionIndexSelected, "\n")
         cat(length(rv$regionList), "regions:", "\n")
