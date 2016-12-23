@@ -102,6 +102,9 @@ server <- function(input, output, session) {
             rv$regionDescripList <- regionDescripList
         } else {
             rv$pathToMapImage <- filePath
+            rv$regionList <- list()
+            rv$subRegionList <- list()
+            rv$regionDescripList <- list()
         }
         map <- readImage(rv$pathToMapImage)
         mapDims <- dim(map)
@@ -109,6 +112,7 @@ server <- function(input, output, session) {
             map <- resize(map, w = 800)
         }
         rv$map <- map
+        rv$regionIndexSelected <- NA
     })
 
     ## When brush region changes, add the rectangle to the list of rects for this region
@@ -128,6 +132,7 @@ server <- function(input, output, session) {
         rv$subRegionList <- list()
         rv$regionDescripList[[length(rv$regionDescripList)+1]] <- input$regionDescrip
         output$storeRegionSuccessMessage <- renderText({"Region stored!"})
+        js$addText(elementID = "regionDescrip", text = "")
     })
 
     ## Double-click existing region: edit
@@ -142,6 +147,7 @@ server <- function(input, output, session) {
     observeEvent(input$updateRegion, {
         rv$regionDescripList[[rv$regionIndexSelected]] <- input$regionDescrip
         output$storeRegionSuccessMessage <- renderText({"Region updated!"})
+        js$addText(elementID = "regionDescrip", text = "")
     })
 
     ## Display the map and annotated regions
